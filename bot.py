@@ -1,5 +1,4 @@
 import streamlit as st
-st.title('HI')
 import os
 os.environ["OPENAI_API_KEY"] = "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"
 from langchain.document_loaders import UnstructuredPDFLoader
