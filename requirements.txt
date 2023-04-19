@@ -1,6 +1,6 @@
 langchain
 unstructured
 openai
-chromad
+chromadb
 Cython
 tiktoken
