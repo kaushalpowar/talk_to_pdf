@@ -1,0 +1,6 @@
+langchain
+unstructured
+openai
+chromad
+Cython
+tiktoken
