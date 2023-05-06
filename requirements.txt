@@ -1,6 +1,5 @@
-langchain
-unstructured
-openai
-chromadb
-Cython
+langchain 
+openai 
+chromadb 
+pypdf 
 tiktoken
