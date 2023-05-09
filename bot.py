@@ -58,7 +58,7 @@ def main():
 
     # Get OpenAI API key from user
     st.subheader("Step 1: Enter your OpenAI API key")
-    api_key = st.text_input("Enter your OpenAI API key", type="password")
+    api_key = st.text_input("Enter your OpenAI API key. (https://platform.openai.com/account/api-keys)", type="password")
     submit = st.button("Submit")
 
     if submit:
