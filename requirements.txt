@@ -4,3 +4,4 @@ chromadb
 pypdf 
 tiktoken
 db-sqlite3
+sqlite3
