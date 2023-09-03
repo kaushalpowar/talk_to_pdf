@@ -6,6 +6,9 @@ from langchain.chains import RetrievalQA
 from langchain.llms import OpenAI
 import os
 import tempfile
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 
 st.set_page_config(page_title="Talk to PDF", page_icon=":robot_face:", layout="wide")
