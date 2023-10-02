@@ -1,5 +1,6 @@
 openai 
 pypdf 
+<<<<<<< HEAD
 llama-index 
 torch 
 transformers 
@@ -7,3 +8,8 @@ sentencepiece
 Pillow
 streamlit-chat
 llama-hub
+=======
+tiktoken
+db-sqlite3
+sqlite3
+>>>>>>> f15d51b4ccb1f447b66ccc414c4834bdbf003920
