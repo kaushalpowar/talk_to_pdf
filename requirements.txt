@@ -1,5 +1,9 @@
-langchain 
 openai 
-chromadb 
 pypdf 
-tiktoken
+llama-index 
+torch 
+transformers 
+sentencepiece 
+Pillow
+streamlit-chat
+llama-hub
