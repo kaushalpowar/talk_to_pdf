@@ -6,3 +6,4 @@ transformers
 sentencepiece 
 Pillow
 streamlit-chat
+streamlit_extras
