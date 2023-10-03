@@ -2,4 +2,4 @@ openai
 pypdf 
 llama-index 
 streamlit-chat
-streamlit_extras
+streamlit-extras
