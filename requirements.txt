@@ -1,9 +1,5 @@
 openai 
 pypdf 
 llama-index 
-torch 
-transformers 
-sentencepiece 
-Pillow
 streamlit-chat
 streamlit_extras
