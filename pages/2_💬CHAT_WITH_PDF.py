@@ -1,10 +1,11 @@
 import streamlit as st
 from streamlit_chat import message
-from functions import sidebar_stuff
+from functions import sidebar_stuff3
 from llama_index.prompts  import PromptTemplate
 from llama_index.chat_engine.condense_question import CondenseQuestionChatEngine
 from llama_index.llms import ChatMessage, MessageRole
-sidebar_stuff()
+
+sidebar_stuff3()
 
 query_engine=st.session_state['query_engine']
 index = st.session_state['index']
