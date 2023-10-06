@@ -76,6 +76,8 @@ def sidebar_stuff2():
         ・Choose your model (gpt-3.5-turbo or gpt-4)
         
         ・Adjust the temperature according to your needs 
+
+        
         (It controls the randomness of the model's output. A higher temperature (e.g., 1.0) makes the output more diverse and random, while a lower temperature (e.g., 0.5) makes the output more focused and deterministic.)
        
         ・Upload a PDF file and ask questions about its content
