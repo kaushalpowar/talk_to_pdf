@@ -1,10 +1,10 @@
 import os
-from functions import sidebar_stuff, query_engine, save_file, remove_file
+from functions import sidebar_stuff2, query_engine, save_file, remove_file
 
 import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
 
-sidebar_stuff()
+sidebar_stuff2()
 
 pdf_file = st.file_uploader(
             "Unleash the power of AI to have a conversation with your PDFs and uncover new insights, all with a single upload⬇️ ",)
