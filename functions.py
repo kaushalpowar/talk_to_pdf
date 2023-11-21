@@ -7,7 +7,6 @@ import os
 from llama_index import VectorStoreIndex, SimpleDirectoryReader, ServiceContext, set_global_service_context
 from llama_index.llms import OpenAI
 from llama_index.embeddings import OpenAIEmbedding
-from llama_index.node_parser.simple import SimpleNodeParser
 from llama_index.text_splitter import TokenTextSplitter
 from llama_index.indices.prompt_helper import PromptHelper
 import tempfile
@@ -175,27 +174,17 @@ def remove_file(file_path):
 
 @st.cache_resource
 def query_engine(pdf_file, model_name, temperature):
-    with st.status("Uploading PDF..."):
+    with st.spinner("Uploading PDF..."):
         file_name = save_file(pdf_file)
     
     llm = OpenAI(model=model_name, temperature=temperature)
-    embed_model = OpenAIEmbedding()
-    node_parser = SimpleNodeParser.from_defaults(
-    text_splitter=TokenTextSplitter(chunk_size=1024, chunk_overlap=20)
-    )
-    
-    prompt_helper = PromptHelper(
-    context_window=4096, 
-    num_output=256, 
-    chunk_overlap_ratio=0.1, 
-    chunk_size_limit=None
-    )
-    service_context = ServiceContext.from_defaults(llm=llm,embed_model=embed_model,node_parser=node_parser, prompt_helper=prompt_helper)
-    with st.status("Loading document..."):
+
+    service_context = ServiceContext.from_defaults(llm=llm)
+    with st.spinner("Loading document..."):
         docs = SimpleDirectoryReader(documents_folder).load_data()
-    with st.status("Indexing document..."):
+    with st.spinner("Indexing document..."):
         index = VectorStoreIndex.from_documents(docs, service_context=service_context)
-    with st.status("Creating query engine..."):
+    with st.spinner("Creating query engine..."):
         query_engine = index.as_query_engine()
 
     st.session_state['index'] = index
