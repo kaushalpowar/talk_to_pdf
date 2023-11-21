@@ -3,3 +3,4 @@ pypdf
 llama-index 
 streamlit-chat
 streamlit-extras
+docx2txt
