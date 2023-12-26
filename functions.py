@@ -11,7 +11,6 @@ from llama_index.text_splitter import TokenTextSplitter
 from llama_index.indices.prompt_helper import PromptHelper
 import tempfile
 
-documents_folder = "documents"
 
 def sidebar_stuff1():
     html_temp = """
@@ -172,24 +171,31 @@ def remove_file(file_path):
         os.remove(documents_folder + '/' + file_path)
 
 
-@st.cache_resource
-def query_engine(pdf_file, model_name, temperature):
-    with st.spinner("Uploading PDF..."):
-        file_name = save_file(pdf_file)
-    
-    llm = OpenAI(model=model_name, temperature=temperature)
 
+def query_engine(docs, model_name, temperature):    
+    llm = OpenAI(model=model_name, temperature=temperature)
+    #file_name = st.session_state["tmp_file"]
     service_context = ServiceContext.from_defaults(llm=llm)
-    with st.spinner("Loading document..."):
-        docs = SimpleDirectoryReader(documents_folder).load_data()
     with st.spinner("Indexing document..."):
         index = VectorStoreIndex.from_documents(docs, service_context=service_context)
+        print("index created : ", index)
     with st.spinner("Creating query engine..."):
         query_engine = index.as_query_engine()
+        print("query engine created ")
 
     st.session_state['index'] = index
     st.session_state['query_engine'] = query_engine
     switch_page('chat with pdf')
-
     return query_engine
 
+def load_document(uploaded_files):
+    temp_dir = tempfile.TemporaryDirectory()
+    for file in uploaded_files:
+        temp_filepath = os.path.join(temp_dir.name, file.name)
+        with open(temp_filepath, "wb") as f:
+            f.write(file.getvalue())
+
+    reader = SimpleDirectoryReader(input_dir=temp_dir.name)
+    docs = reader.load_data()
+    print(docs)
+    return docs
