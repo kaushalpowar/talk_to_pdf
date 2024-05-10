@@ -4,8 +4,8 @@ import os
 import time
 import tempfile
 import openai
-from llama_index import VectorStoreIndex, SimpleDirectoryReader, ServiceContext, set_global_service_context
-from llama_index.llms import OpenAI
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, ServiceContext, set_global_service_context
+from llama_index.llms.openai import OpenAI
 from functions import sidebar_stuff1
 
 
