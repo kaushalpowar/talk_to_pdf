@@ -1,9 +1,9 @@
 import streamlit as st
 from streamlit_chat import message
 from functions import sidebar_stuff3
-from llama_index.prompts  import PromptTemplate
-from llama_index.chat_engine.condense_question import CondenseQuestionChatEngine
-from llama_index.llms import ChatMessage, MessageRole
+from llama_index.core.prompts  import PromptTemplate
+from llama_index.core.chat_engine.condense_question import CondenseQuestionChatEngine
+from llama_index.core.llms import ChatMessage, MessageRole
 
 sidebar_stuff3()
 
