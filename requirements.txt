@@ -1,6 +1,6 @@
 openai
 pypdf
-llama-index
+llama-index== 0.10.27
 streamlit-chat
 streamlit-extras
 
