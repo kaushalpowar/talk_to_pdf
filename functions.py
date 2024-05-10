@@ -4,11 +4,11 @@ from streamlit_extras.switch_page_button import switch_page
 import openai
 import os
 
-from llama_index import VectorStoreIndex, SimpleDirectoryReader, ServiceContext, set_global_service_context
-from llama_index.llms import OpenAI
-from llama_index.embeddings import OpenAIEmbedding
-from llama_index.text_splitter import TokenTextSplitter
-from llama_index.indices.prompt_helper import PromptHelper
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, ServiceContext, set_global_service_context
+from llama_index.llms.openai import OpenAI
+from llama_index.embeddings.openai import OpenAIEmbedding
+from llama_index.core.text_splitter import TokenTextSplitter
+from llama_index.core.indices.prompt_helper import PromptHelper
 import tempfile
 
 
