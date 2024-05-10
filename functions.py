@@ -39,7 +39,7 @@ def sidebar_stuff1():
 
 
         st.markdown("""
-        Made by [@Obelisk_1531](https://twitter.com/Obelisk_1531)
+        Made by [@Obelisk_1531](https://twitter.com/holy_kau)
         """)
         html(button, height=70, width=220)
         st.markdown(
@@ -85,7 +85,7 @@ def sidebar_stuff2():
 
 
         st.markdown("""
-        Made by [@Obelisk_1531](https://twitter.com/Obelisk_1531)
+        Made by [@Obelisk_1531](https://twitter.com/holy_kau)
         """)
         html(button, height=70, width=220)
         st.markdown(
@@ -126,7 +126,7 @@ def sidebar_stuff3():
 
 
         st.markdown("""
-        Made by [@Obelisk_1531](https://twitter.com/Obelisk_1531)
+        Made by [@Obelisk_1531](https://twitter.com/holy_kau)
         """)
         html(button, height=70, width=220)
         st.markdown(
