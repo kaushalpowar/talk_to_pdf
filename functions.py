@@ -4,7 +4,7 @@ from streamlit_extras.switch_page_button import switch_page
 import openai
 import os
 
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, ServiceContext, set_global_service_context
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings, set_global_service_context
 from llama_index.llms.openai import OpenAI
 from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.core.text_splitter import TokenTextSplitter
@@ -175,9 +175,10 @@ def remove_file(file_path):
 def query_engine(docs, model_name, temperature):    
     llm = OpenAI(model=model_name, temperature=temperature)
     #file_name = st.session_state["tmp_file"]
-    service_context = ServiceContext.from_defaults(llm=llm)
+    #service_context = ServiceContext.from_defaults(llm=llm)
+    Settings.llm = llm
     with st.spinner("Indexing document..."):
-        index = VectorStoreIndex.from_documents(docs, service_context=service_context)
+        index = VectorStoreIndex.from_documents(docs, llm=llm)
         print("index created : ", index)
     with st.spinner("Creating query engine..."):
         query_engine = index.as_query_engine()
