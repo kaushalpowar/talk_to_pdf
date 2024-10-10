@@ -1,16 +1,63 @@
-# Talk to PDF 🤖 📑️ 
-### This is the README file for the "Talk to PDF" code. 
-The code is written in Python and uses the Streamlit library to create an interactive web application. The application allows users to ask questions about the content of a PDF file using natural language and receive instant answers powered by an AI question-answering system.
-# Link [CLICK HERE](https://talk-to-pdf.streamlit.app/)
-# Usage 
-1. Enter your OpenAI API key 
-in the "Step 1: Enter your OpenAI API key" section. 
-If you don't have an API key, you can get one from the OpenAI platform.
+# Talk to PDF 🤖📑
 
- 2. Click the "Submit" button to set the OpenAI API key.
 
-3. In the "Step 2: Upload your PDF" section, click the "Browse Files" button and select a PDF file to upload.
-4.  Once the PDF is uploaded, you can enter a question in the "Ask a question" input box.
-5. Click the "Ask" button to submit your question.
-6. The application will use the uploaded PDF and the question to generate a response using the AI question-answering system.
-7.  The response will be displayed on the screen. Feel free to reach out to the author for any questions or feedback. Enjoy interacting with your PDFs using natural language! 🚀📄
+Talk to PDF is an interactive web application that allows users to ask questions about PDF content using natural language and receive instant AI-powered answers.
+
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://talk-to-pdf.streamlit.app/)
+
+## 🌟 Features
+
+- Upload and analyze PDF documents
+- Ask questions in natural language
+- Receive instant AI-generated answers
+- User-friendly interface built with Streamlit
+- Powered by OpenAI's language models
+
+## 🚀 Quick Start
+
+1. Visit the [Talk to PDF App](https://talk-to-pdf.streamlit.app/)
+2. Enter your OpenAI API key
+3. Upload a PDF file
+4. Start asking questions!
+
+## 📋 Usage Guide
+
+1. **Enter OpenAI API Key**
+   - In the "Step 1" section, enter your OpenAI API key
+   - Click "Submit" to set the key
+   - Don't have a key? [Get one from OpenAI](https://platform.openai.com/)
+
+2. **Upload PDF**
+   - In the "Step 2" section, click "Browse Files"
+   - Select your PDF file to upload
+
+3. **Ask Questions**
+   - Type your question in the "Ask a question" input box
+   - Click "Ask" to submit
+
+4. **View Answers**
+   - The AI-generated response will appear on the screen
+
+## 🛠️ Technology Stack
+
+- Python
+- Streamlit
+- OpenAI API
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/yourusername/talk-to-pdf/issues).
+
+## 📝 License
+
+This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.
+
+## 📬 Contact
+
+Author - [Kaushal](https://www.linkedin.com/in/kaushal-powar-a52b1a159/)
+
+Project Link: [https://github.com/yourusername/talk-to-pdf](https://github.com/yourusername/talk-to-pdf)
+
+---
+
+Enjoy interacting with your PDFs using natural language! 🚀📄
