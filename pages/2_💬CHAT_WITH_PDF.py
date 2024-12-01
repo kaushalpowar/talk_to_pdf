@@ -1,18 +1,16 @@
 import streamlit as st
 from streamlit_chat import message
 from functions import sidebar_stuff3
-from llama_index.core.prompts  import PromptTemplate
+from llama_index.core.prompts import PromptTemplate
 from llama_index.core.chat_engine.condense_question import CondenseQuestionChatEngine
 from llama_index.core.llms import ChatMessage, MessageRole
 
 sidebar_stuff3()
 
-query_engine=st.session_state['query_engine']
+query_engine = st.session_state['query_engine']
 index = st.session_state['index']
 
-#from llama_index.memory import ChatMemoryBuffer
-
-#memory = ChatMemoryBuffer.from_defaults(token_limit=1500)
+# Custom prompt template for context-aware question reformulation
 custom_prompt = PromptTemplate("""\
 Given a conversation (between Human and Assistant) and a follow up message from Human, \
 rewrite the message to be a standalone question that captures all relevant context \
@@ -27,6 +25,7 @@ from the conversation.
 <Standalone question>
 """)
 
+# Initial chat history setup
 custom_chat_history = [
     ChatMessage(
         role=MessageRole.USER, 
@@ -38,14 +37,14 @@ custom_chat_history = [
     )
 ]
 
-query_engine = st.session_state['query_engine']
+# Initialize chat engine with the query engine and custom prompt
 chat_engine = CondenseQuestionChatEngine.from_defaults(
     query_engine=query_engine, 
     condense_question_prompt=custom_prompt,
     chat_history=custom_chat_history
 )
 
-response = chat_engine.chat("Hello!")
+# Function to handle conversational chat with streaming responses
 def conversational_chat(query):
     streaming_response = chat_engine.stream_chat(query)
     response_tokens = []
@@ -53,7 +52,7 @@ def conversational_chat(query):
         response_tokens.append(token)
     return ''.join(response_tokens)
 
-# Initialize session state variables
+# Initialize session state variables for chat history
 if 'history' not in st.session_state:
     st.session_state['history'] = []
 
@@ -67,7 +66,7 @@ if 'past' not in st.session_state:
 response_container = st.container()
 container = st.container()
 
-# User input form
+# User input form for querying the document
 with container:
     with st.form(key='my_form', clear_on_submit=True):
         user_input = st.text_input("Query:", placeholder="What is this document about?", key='input')
@@ -83,6 +82,5 @@ with container:
 if st.session_state['generated']:
     with response_container:
         for i in range(len(st.session_state['generated'])):
-            message(st.session_state["past"][i], is_user=True, key=str(i) + '_user', avatar_style="big-ears",seed="missy")
+            message(st.session_state["past"][i], is_user=True, key=str(i) + '_user', avatar_style="big-ears", seed="missy")
             message(st.session_state["generated"][i], key=str(i))
-#st.markdown(response)
