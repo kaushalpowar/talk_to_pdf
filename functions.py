@@ -1,202 +1,230 @@
+"""
+Utility functions for the Talk to PDF application.
+Handles UI components, document processing, and OpenAI integration.
+"""
+
+import os
+import tempfile
+from dataclasses import dataclass
+from pathlib import Path
+from typing import List, Optional, Dict, Any
+
 import streamlit as st
 from streamlit.components.v1 import html
 from streamlit_extras.switch_page_button import switch_page
 import openai
-import os
-
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings, set_global_service_context
+from llama_index.core import (
+    VectorStoreIndex,
+    SimpleDirectoryReader,
+    Settings,
+    Document
+)
 from llama_index.llms.openai import OpenAI
 from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.core.text_splitter import TokenTextSplitter
 from llama_index.core.indices.prompt_helper import PromptHelper
-import tempfile
 
+# Constants
+DOCUMENTS_FOLDER = "documents"
+DEFAULT_TEMPERATURE = 0.5
+SUPPORT_BUTTON_HTML = """
+<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" 
+data-name="bmc-button" data-slug="kaushal.ai" data-color="#FFDD00" data-emoji=""  
+data-font="Cookie" data-text="Support my work" data-outline-color="#000000" 
+data-font-color="#000000" data-coffee-color="#ffffff" ></script>
+"""
 
-def sidebar_stuff1():
-    html_temp = """
-                        <div style="background-color:{};padding:1px">
+@dataclass
+class SidebarConfig:
+    """Configuration for sidebar content."""
+    title: str
+    content: str
+    show_api_warning: bool = False
 
-                        </div>
-                        """
+def create_sidebar_html(bg_color: str = "rgba(55, 53, 47, 0.16)") -> str:
+    """Creates HTML template for sidebar divider."""
+    return f"""
+    <div style="background-color:{bg_color};padding:1px">
+    </div>
+    """
 
+def add_support_button() -> None:
+    """Adds the 'Buy Me a Coffee' support button to the sidebar."""
+    html(SUPPORT_BUTTON_HTML, height=70, width=220)
+    st.markdown(
+        """
+        <style>
+            iframe[width="210"] {
+                position: fixed;
+                bottom: 60px;
+                right: 40px;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    button = """
-    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="kaushal.ai" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Support my work" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>"""
+def render_sidebar(config: SidebarConfig) -> None:
+    """Renders sidebar with specified configuration."""
     with st.sidebar:
-        st.markdown("""
-        # ● About 
-        "Talk to PDF" is an app that allows users to ask questions about the content of a PDF file using Natural Language Processing. 
+        st.markdown(f"# ● {config.title}")
+        st.markdown(config.content)
         
-        The app uses a question-answering system powered by OpenAI's GPT 🔥 to provide accurate and relevant answers to the your queries.       """)
+        if config.show_api_warning:
+            st.warning("⚠️ Please enter OpenAI API key")
+            
+        st.markdown(create_sidebar_html())
+        st.markdown("Made by [Kaushal](https://twitter.com/holy_kau)")
+        add_support_button()
 
-        st.markdown(html_temp.format("rgba(55, 53, 47, 0.16)"), unsafe_allow_html=True)
-        st.markdown("""
+def sidebar_stuff1() -> None:
+    """Renders the first sidebar configuration."""
+    config = SidebarConfig(
+        title="About",
+        content="""
+        "Talk to PDF" is an app that allows users to ask questions about the content 
+        of a PDF file using Natural Language Processing.
+        
+        The app uses a question-answering system powered by OpenAI's GPT 🔥 to provide 
+        accurate and relevant answers to your queries.
+        
         # ● Get started
         ・Paste your OpenAI API key. (click on the link to get your API key)
-       
-        """)
-        st.markdown(html_temp.format("rgba(55, 53, 47, 0.16)"), unsafe_allow_html=True)
+        """
+    )
+    render_sidebar(config)
 
-
-        st.markdown("""
-        Made by [Kaushal](https://twitter.com/holy_kau)
-        """)
-        html(button, height=70, width=220)
-        st.markdown(
-            """
-            <style>
-                iframe[width="210"] {
-                    position: fixed;
-                    bottom: 60px;
-                    right: 40px;
-                }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
-
-
-def sidebar_stuff2():
-    html_temp = """
-                        <div style="background-color:{};padding:1px">
-
-                        </div>
-                        """
-
-
-    button = """
-    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="kaushal.ai" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Support my work" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>"""
-    with st.sidebar:
-       
-        st.markdown(html_temp.format("rgba(55, 53, 47, 0.16)"), unsafe_allow_html=True)
-        st.markdown("""
-       
+def sidebar_stuff2() -> None:
+    """Renders the second sidebar configuration."""
+    config = SidebarConfig(
+        title="Options",
+        content="""
         ・Choose your model (gpt-3.5-turbo or gpt-4)
         
-        ・Adjust the temperature according to your needs 
-
+        ・Adjust the temperature according to your needs
         
-        (It controls the randomness of the model's output. A higher temperature (e.g., 1.0) makes the output more diverse and random, while a lower temperature (e.g., 0.5) makes the output more focused and deterministic.)
-       
+        (It controls the randomness of the model's output. A higher temperature (e.g., 1.0) 
+        makes the output more diverse and random, while a lower temperature (e.g., 0.5) 
+        makes the output more focused and deterministic.)
+        
         ・Upload a PDF file and ask questions about its content
+        """
+    )
+    render_sidebar(config)
 
-        """)
-        st.markdown(html_temp.format("rgba(55, 53, 47, 0.16)"), unsafe_allow_html=True)
-
-
-        st.markdown("""
-        Made by [Kaushal](https://twitter.com/holy_kau)
-        """)
-        html(button, height=70, width=220)
-        st.markdown(
-            """
-            <style>
-                iframe[width="210"] {
-                    position: fixed;
-                    bottom: 60px;
-                    right: 40px;
-                }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
-
-
-def sidebar_stuff3():
-    html_temp = """
-                        <div style="background-color:{};padding:1px">
-
-                        </div>
-                        """
-
-
-    button = """
-    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="kaushal.ai" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Support my work" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>"""
-    with st.sidebar:
-       
-        st.markdown(html_temp.format("rgba(55, 53, 47, 0.16)"), unsafe_allow_html=True)
-        st.markdown("""
-      
+def sidebar_stuff3() -> None:
+    """Renders the third sidebar configuration."""
+    config = SidebarConfig(
+        title="Instructions",
+        content="""
         ・Ask questions about your documents content
         
         ・Get instant answers to your questions
-       
-        """)
-        st.markdown(html_temp.format("rgba(55, 53, 47, 0.16)"), unsafe_allow_html=True)
+        """
+    )
+    render_sidebar(config)
 
-
-        st.markdown("""
-        Made by [Kaushal](https://twitter.com/holy_kau)
-        """)
-        html(button, height=70, width=220)
-        st.markdown(
-            """
-            <style>
-                iframe[width="210"] {
-                    position: fixed;
-                    bottom: 60px;
-                    right: 40px;
-                }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
+def save_file(doc: Any) -> str:
+    """
+    Saves uploaded file to documents folder and manages session state.
     
-
-def save_file(doc):
-    fn = os.path.basename(doc.name)
-    # check if documents_folder exists in the directory
-    if not os.path.exists(documents_folder):
-        # if documents_folder does not exist then making the directory
-        os.makedirs(documents_folder)
-    # open read and write the file into the server
-    open(documents_folder + '/' + fn, 'wb').write(doc.read())
-    # Check for the current filename, If new filename
-    # clear the previous cached vectors and update the filename 
-    # with current name     
-    if st.session_state.get('file_name'):
-        if st.session_state.file_name != fn:
+    Args:
+        doc: Streamlit uploaded file object
+    
+    Returns:
+        str: Filename of saved document
+    """
+    try:
+        filename = Path(doc.name).name
+        documents_path = Path(DOCUMENTS_FOLDER)
+        
+        # Create documents directory if it doesn't exist
+        documents_path.mkdir(exist_ok=True)
+        
+        # Save file
+        file_path = documents_path / filename
+        file_path.write_bytes(doc.read())
+        
+        # Update session state
+        if st.session_state.get('file_name') != filename:
             st.cache_resource.clear()
-            st.session_state['file_name'] = fn
-    else:
-        st.session_state['file_name'] = fn
+            st.session_state['file_name'] = filename
+            
+        return filename
+    
+    except Exception as e:
+        st.error(f"Error saving file: {str(e)}")
+        raise
 
-    return fn
+def remove_file(file_path: str) -> None:
+    """
+    Removes file from documents folder after processing.
+    
+    Args:
+        file_path: Path to file to be removed
+    """
+    try:
+        full_path = Path(DOCUMENTS_FOLDER) / file_path
+        if full_path.is_file():
+            full_path.unlink()
+    except Exception as e:
+        st.warning(f"Error removing temporary file: {str(e)}")
 
+def load_document(uploaded_files: List[Any]) -> List[Document]:
+    """
+    Loads documents from uploaded files into memory.
+    
+    Args:
+        uploaded_files: List of Streamlit uploaded file objects
+    
+    Returns:
+        List[Document]: Loaded documents
+    """
+    with tempfile.TemporaryDirectory() as temp_dir:
+        # Save uploaded files to temporary directory
+        for file in uploaded_files:
+            temp_path = Path(temp_dir) / file.name
+            temp_path.write_bytes(file.getvalue())
+        
+        # Load documents using LlamaIndex
+        reader = SimpleDirectoryReader(input_dir=temp_dir)
+        return reader.load_data()
 
-def remove_file(file_path):
-    # Remove the file from the Document folder once 
-    # vectors are created
-    if os.path.isfile(documents_folder + '/' + file_path):
-        os.remove(documents_folder + '/' + file_path)
-
-
-
-def query_engine(docs, model_name, temperature):    
-    llm = OpenAI(model=model_name, temperature=temperature)
-    #file_name = st.session_state["tmp_file"]
-    #service_context = ServiceContext.from_defaults(llm=llm)
-    Settings.llm = llm
-    with st.spinner("Indexing document..."):
-        index = VectorStoreIndex.from_documents(docs, llm=llm)
-        print("index created : ", index)
-    with st.spinner("Creating query engine..."):
-        query_engine = index.as_query_engine()
-        print("query engine created ")
-
-    st.session_state['index'] = index
-    st.session_state['query_engine'] = query_engine
-    switch_page('chat with pdf')
-    return query_engine
-
-def load_document(uploaded_files):
-    temp_dir = tempfile.TemporaryDirectory()
-    for file in uploaded_files:
-        temp_filepath = os.path.join(temp_dir.name, file.name)
-        with open(temp_filepath, "wb") as f:
-            f.write(file.getvalue())
-
-    reader = SimpleDirectoryReader(input_dir=temp_dir.name)
-    docs = reader.load_data()
-    print(docs)
-    return docs
+def query_engine(
+    docs: List[Document],
+    model_name: str,
+    temperature: float = DEFAULT_TEMPERATURE
+) -> Any:
+    """
+    Creates and configures the query engine for document processing.
+    
+    Args:
+        docs: List of documents to process
+        model_name: Name of the OpenAI model to use
+        temperature: Temperature setting for model output
+    
+    Returns:
+        Query engine instance
+    """
+    try:
+        # Configure LLM
+        llm = OpenAI(model=model_name, temperature=temperature)
+        Settings.llm = llm
+        
+        # Create document index
+        with st.spinner("Indexing document..."):
+            index = VectorStoreIndex.from_documents(docs, llm=llm)
+            st.session_state['index'] = index
+        
+        # Create query engine
+        with st.spinner("Creating query engine..."):
+            query_engine = index.as_query_engine()
+            st.session_state['query_engine'] = query_engine
+        
+        # Switch to chat interface
+        switch_page('chat with pdf')
+        return query_engine
+    
+    except Exception as e:
+        st.error(f"Error creating query engine: {str(e)}")
+        raise
