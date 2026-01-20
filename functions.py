@@ -27,7 +27,7 @@ def sidebar_stuff1():
         # ● About 
         "Talk to PDF" is an app that allows users to ask questions about the content of a PDF file using Natural Language Processing. 
         
-        The app uses a question-answering system powered by OpenAI's GPT 🔥 to provide accurate and relevant answers to the your queries.       """)
+        The app uses a question-answering system powered by OpenAI's GPT 🔥 to provide accurate and relevant answers to your queries.       """)
 
         st.markdown(html_temp.format("rgba(55, 53, 47, 0.16)"), unsafe_allow_html=True)
         st.markdown("""
